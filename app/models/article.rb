@@ -14,8 +14,8 @@ class Article < ActiveRecord::Base
   end
   
   def self.all_years
-    # ngram_redis.zrange(NGRAM_ALL_YEARS_KEY, 0, 100)
-    (1981..2013).to_a
+    ngram_redis.zrange(NGRAM_ALL_YEARS_KEY, 0, 100).map(&:to_i)
+    # (1981..2013).to_a
   end
   
   def self.sorted_set_key(year, n)
@@ -39,7 +39,7 @@ class Article < ActiveRecord::Base
     {:terms => terms_hsh, :years => all_years, :smoothing => smoothing}
   end
   
-  # TO DO: cleanup
+  # TO DO: cleanup, pipelined where possible
   def self.inner_query(term, smoothing = 0)
     term.squish!
     words = term.split(" ")
@@ -90,8 +90,44 @@ class Article < ActiveRecord::Base
             limit(limit)
   end
   
+  def self.full_text_search(terms, opts = {})
+    limit = opts[:limit] || 3
+    n = terms.size
+    
+    ts_query_arg = ""
+    exact_qry_text = ""
+    
+    terms.each_with_index do |t, ix|
+      # what about searching with &
+      ts_query_arg << "#{' |' if ix > 0} (#{t.split(' ').reject{|w| w == '&'}.join(' & ')})"
+      exact_qry_text << "#{' OR' if ix > 0} stripped_text LIKE ?"
+    end
+    
+    full_text_conditions = ["to_tsvector('english', article_text) @@ to_tsquery(?)", ts_query_arg]
+    exact_conditions = [exact_qry_text] + terms.map{|t| "%#{t}%" }
+    
+    scope_without_exact = Article.unscoped.select("id").where(:is_wedding => true).
+                        where(full_text_conditions).
+                        limit(1000)
+                        
+    inner_sql_without_exact = scope_without_exact.to_sql
+    inner_sql_with_exact = scope_without_exact.where(exact_conditions).to_sql
+    
+    articles = Article.where("id IN (#{inner_sql_with_exact})").order("random()").limit(3)
+    
+    if articles.length == 0
+      Article.where("id IN (#{inner_sql_without_exact})").order("random()").limit(3)
+    else
+      articles
+    end
+  end
+  
+  def thumbnail_image_url
+    read_attribute('image_url').to_s.gsub(/\-(thumbLarge|superJumbo)\./, '-thumbStandard.')
+  end
+  
   def image_url
-    read_attribute('image_url').presence || DEFAULT_IMAGE_URL
+    thumbnail_image_url.presence || DEFAULT_IMAGE_URL
   end
   
   def canonical_url

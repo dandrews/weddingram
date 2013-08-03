@@ -26,7 +26,7 @@ class ArticlesController < ApplicationController
   
   def search
     terms = get_terms_from_params
-    articles = Article.search(terms, :limit => 3)
+    articles = Article.full_text_search(terms, :limit => 3)
     
     render :text => render_to_string(:partial => 'summaries', :locals => {:articles => articles})
   end
