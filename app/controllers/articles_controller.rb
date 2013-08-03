@@ -3,7 +3,7 @@ class ArticlesController < ApplicationController
   end
   
   def ngram_calculator
-    terms = params[:q].split(",").map{|t| t.squish.gsub(/[^[[:word:]]\s\-\&]/, '')}
+    terms = get_terms_from_params
     
     smoothing_factor = params[:s].to_i
     
@@ -16,11 +16,24 @@ class ArticlesController < ApplicationController
     elsif smoothing_factor < 0 || smoothing_factor > 5
       {:error => "Smoothing Factor must be between 0 and 5"}
     else
-      Article.ngram_query_for_web(terms, smoothing_factor)
+      Article.ngram_query(terms, smoothing_factor)
     end
     
     hsh[:error] = "Something went wrong" if hsh.blank?
     
     render :json => hsh
+  end
+  
+  def search
+    terms = get_terms_from_params
+    articles = Article.search(terms, :limit => 3)
+    
+    render :text => render_to_string(:partial => 'summaries', :locals => {:articles => articles})
+  end
+  
+  private
+  
+  def get_terms_from_params
+    params[:q].split(",").map{|t| t.squish.gsub(/[^[[:word:]]\s\-\&]/, '')}
   end
 end

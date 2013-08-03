@@ -1,116 +1,12 @@
-<%= javascript_include_tag "http://code.highcharts.com/highcharts.js" %>
-<%= javascript_include_tag "http://code.highcharts.com/modules/exporting.js" %>
-
 <p>Enter some <strong>case-sensitive</strong> comma-separated phrases to search:</p>
 
-<%= text_field_tag :q, params[:q], :style => "width: 250px" %>
-<span style="margin-left: 10px">Smoothing:</span>
-<%= text_field_tag :s, params[:s] || 1, :style => "width: 30px" %>
-<%= submit_tag "Search NYT Weddings & Celebrations", :id => "ngramSubmit", :class => "btn", :style => "margin-left: 10px" %>
+<%= form_tag ngram_calculator_path, :method => :get, :remote => true, :id => 'ngramForm' do %>
+  <%= search_field_tag :q, params[:q], :maxlength => 10_000 %>
+  <span class="smoothing">Smoothing:</span>
+  <%= number_field_tag :s, params[:s] || 1, :min => 0, :max => 5 %>
+  <%= submit_tag "Search NYT Weddings & Celebrations", :id => "ngramSubmit", :class => "btn" %>
+<% end %>
 
-<div id="container" style="min-width: 400px; max-width: 1000px; height: 500px; margin: 20px auto"></div>
+<div id="ngramContainer"></div>
 
-<script>
-$(function() {
-  var getKeys = function(obj) {
-    var key, keys;
-    keys = [];
-    for (key in obj) {
-      keys.push(key);
-    }
-    return keys;
-  };
-  
-  $('#ngramSubmit').on({
-    click: function() {
-      var $this, query;
-      $this = $(this);
-      query = $this.siblings('#q').val();
-      smooth = $this.siblings('#s').val();
-      return $.post("/articles/ngram_calculator", { q: query, s: smooth }, function(data) {
-        // window.history.pushState(null, null, "https://reader2000.fwd.wf/ngram?q=" + query + "&s=" + smooth);
-
-        var series, term, terms, _i, _len;
-        if (data["error"]) {
-          alert(data["error"]);
-          return false;
-        } else if (!data) {
-          alert("TRY AGAIN");
-          return false;
-        }
-        terms = getKeys(data["terms"]);
-        series = [];
-        for (_i = 0, _len = terms.length; _i < _len; _i++) {
-          term = terms[_i];
-          series.push({
-            name: term,
-            data: data["terms"][term],
-            pointStart: data["years"][0]
-          });
-        }
-        return $('#container').highcharts({
-          tooltip: {
-            enabled: false
-          },
-          xAxis: {
-            categories: data["years"],
-            tickInterval: 5,
-            tickWidth: 0,
-            gridLineWidth: 1,
-            tickmarkPlacement: 'on'
-          },
-          yAxis: {
-            min: 0,
-            plotLines: [
-              {
-                value: 0,
-                width: 1,
-                color: '#808080'
-              }
-            ],
-            labels: {
-              formatter: function() {
-                return Math.round(100 * 1000000000000 * this.value) / 1000000000000 + "%";
-              }
-            },
-            title: {
-              text: ""
-            }
-          },
-          title: {
-            text: terms.join(", ")
-          },
-          subtitle: {
-            text: "Smoothing Factor " + data["smoothing"]
-          },
-          series: series,
-          legend: {
-            layout: "horizontal",
-            align: "center",
-            verticalAlign: "bottom",
-            borderWidth: 0
-          },
-          plotOptions: {
-            series: {
-              animation: false,
-              marker: {
-                enabled: false
-              }
-            }
-          }
-        });
-      });
-    }
-  });
-  
-  $(window).keydown(function(event){
-    if(event.keyCode == 13) {
-      $('#ngramSubmit').click()
-    }
-  });
-  
-  if ($('#q').val()) {
-    $('#ngramSubmit').click();
-  }
-});
-</script>
+<div id="articleSummaries"></div>

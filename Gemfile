@@ -6,6 +6,7 @@ gem 'pg', '0.16.0'
 gem 'redis', '3.0.4'
 gem 'rack-timeout', '0.0.4'
 gem 'heroku'
+gem 'bootstrap-sass', '2.3.2.1'
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
@@ -19,6 +20,3 @@ group :production do
 end
 
 gem 'jquery-rails', '3.0.4'
-
-# To use debugger
-# gem 'debugger'

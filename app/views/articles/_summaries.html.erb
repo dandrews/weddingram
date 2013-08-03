@@ -1,0 +1,5 @@
+<h4>A few articles matching at least one of your search terms:</h4>
+
+<% articles.each do |article| %>
+  <%= render 'summary', :article => article %>
+<% end %>
