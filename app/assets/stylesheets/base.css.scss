@@ -1,30 +1,61 @@
 @import "bootstrap";
 
 #ngramContainer {
-  min-width: 400px;
-  max-width: 1000px;
-  height: 500px
+  width: 600px;
+  height: 400px;
+  margin-bottom: 10px;
 }
 
 #ngramForm {
   #q { width: 250px; }
-  .smoothing { margin-left: 10px; }
   #s { width: 30px; }
-  #ngramSubmit { margin-left: 10px; }
+  
+  .smoothing {
+    margin-left: 10px;
+    position: relative;
+    top: -5px;
+  }
+  
+  #ngramSubmit {
+    margin-left: 10px;
+    position: relative;
+    top: -5px;
+  }
 }
 
 #articleSummaries {
-  padding-left: 64px;
-  min-width: 400px;
-  max-width: 700px;
+  width: 100%;
+  border-top: 1px solid #ccc;
   
   .articleSummary {
+    width: 500px;
+    margin-bottom: 20px;
+    
     .image {
       float: left;
+      position: relative;
+      top: 4px;
+      
+      .thumb {
+        width: 75px;
+        height: auto;
+      }
     }
-    .thumb {
-      width: 75px;
-      height: auto;
+    
+    .details {
+      float: left;
+      max-width: 80%;
+      padding-left: 18px;
+      
+      .title {
+        font-weight: bold;
+        font-size: 120%;
+      }
+      
+      .date {
+        color: #666;
+        padding-bottom: 2px;
+      }
     }
   }
 }
