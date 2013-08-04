@@ -30,7 +30,24 @@ class Article < ActiveRecord::Base
     nil
   end
   
-  def self.ngram_query(terms, smoothing = 0)
+  def self.get_terms_from_query_string(qry)
+    qry.split(",").map{|t| t.squish.gsub(/[^[[:word:]]\s\-\&]/, '')}
+  end
+  
+  def self.from_redis(string)
+    qry, smoothing = string.split("::")
+    
+    terms = get_terms_from_query_string(qry)
+    smoothing = smoothing.to_i if smoothing.present?
+    
+    {:query => terms.join(", "), :smoothing => smoothing}
+  end
+  
+  def self.recommended_query_hsh
+    from_redis(Article.ngram_redis.srandmember("recommended_searches") || "Yale, Harvard, Princeton::1")
+  end
+  
+  def self.ngram_query(terms, smoothing = 1)
     terms_hsh = terms.inject(ActiveSupport::OrderedHash.new) do |hsh, term|
       hsh[term] = inner_query(term, smoothing)
       hsh

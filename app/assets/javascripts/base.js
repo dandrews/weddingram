@@ -151,4 +151,14 @@ $(function() {
       $this.html(data)
     });
   });
+  
+  $('#randomSearch').on({
+    click: function() {
+      $.get("/articles/random", function(data) {
+        $("#ngramForm #q").val(data["query"]);
+        $("#ngramForm #s").val(data["smoothing"]);
+        $("#ngramForm").submit();
+      });
+    }
+  });
 });

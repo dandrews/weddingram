@@ -31,9 +31,13 @@ class ArticlesController < ApplicationController
     render :text => render_to_string(:partial => 'summaries', :locals => {:articles => articles})
   end
   
+  def random
+    render :json => Article.recommended_query_hsh
+  end
+  
   private
   
   def get_terms_from_params
-    params[:q].split(",").map{|t| t.squish.gsub(/[^[[:word:]]\s\-\&]/, '')}
+    Article.get_terms_from_query_string(params[:q])
   end
 end
