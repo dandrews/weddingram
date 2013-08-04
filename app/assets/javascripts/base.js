@@ -20,7 +20,12 @@ $(function() {
       $this = $(this);
       
       if (data["tagline"]) {
-        $("#tagline").html(data["tagline"]);
+        var tag = $("#tagline")
+        if (tag.hasClass("keep")) {
+          tag.removeClass("keep");
+        } else {
+          tag.html(data["tagline"]);
+        }
       }
       
       query = $this.find('#q').val();
@@ -151,7 +156,7 @@ $(function() {
   $('#randomSearch').on({
     click: function() {
       $.get("/articles/random", function(data) {
-        $("#ngramForm #q").val(data["query"]);
+        $("#ngramForm #q").val(data["raw"]);
         $("#ngramForm #s").val(data["smoothing"]);
         $("#ngramForm").submit();
       });

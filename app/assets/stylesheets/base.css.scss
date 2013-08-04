@@ -1,8 +1,18 @@
 @import "bootstrap";
 @import "bootstrap-responsive";
 
-#tagline {
-  padding-bottom: 12px;
+.page-header {
+  .logo {
+    color: #333333;
+    text-decoration: none;
+    &:hover {
+      color: #999999;
+    }
+  }
+  
+  #tagline {
+    padding-bottom: 12px;
+  }
 }
 
 #ngramContainer {
@@ -11,11 +21,12 @@
 }
 
 #ngramForm {
-  #q { width: 497px; }
+  #q { width: 489px; }
   #s { width: 30px; }
   
   .searchParams {
     margin-bottom: 10px;
+    margin-right: 10px;
   }
   
   .smoothing {

@@ -40,7 +40,7 @@ class Article < ActiveRecord::Base
     terms = get_terms_from_query_string(qry)
     smoothing = smoothing.to_i if smoothing.present?
     
-    {:query => terms.join(", "), :smoothing => smoothing}
+    {:query => terms.join(", "), :smoothing => smoothing, :raw => qry}
   end
   
   def self.recommended_query_hsh
@@ -56,36 +56,33 @@ class Article < ActiveRecord::Base
     {:terms => terms_hsh, :years => all_years, :smoothing => smoothing, :tagline => Tagline.random}
   end
   
-  # TO DO: cleanup, pipelined where possible
-  def self.inner_query(term, smoothing = 0)
+  def self.inner_query(term, smoothing)
     term.squish!
-    words = term.split(" ")
-    n = words.size
+    n = term.split(" ").size
     
     years = all_years
     
-    output = years.inject([]) do |ary, year|
-      key = Article.sorted_set_key(year, n)
-      member = words.join(" ")
-
-      # hsh[year] = {:count => ngram_redis.zscore(key, member).to_i, :total => ngram_redis.zscore(TOTAL_KEY, key).to_i}
-      # hsh[year][:frac] = hsh[year][:count].to_f / hsh[year][:total] rescue nil
-      # hsh
-      
-      ary << ngram_redis.zscore(key, member).to_f / ngram_redis.zscore(TOTAL_KEY, key).to_i
-      ary
+    counts_hsh, totals_hsh = {}, {}
+    
+    Article.ngram_redis.pipelined do
+      years.each do |year|
+        key = Article.sorted_set_key(year, n)
+        
+        counts_hsh[year] = Article.ngram_redis.zscore(key, term)
+        totals_hsh[year] = Article.ngram_redis.zscore(Article::TOTAL_KEY, key)
+      end
     end
     
-    # TO DO: smooth with weighted averages instead of simple
-    if smoothing > 0
-      smoothed = []
-      output.each_with_index do |val, ix|
-        lower = [0, ix - smoothing].max
-        upper = [output.size - 1, ix + smoothing].min
-        smoothed << output[lower..upper].sum.to_f / (upper - lower + 1)
-      end
-      
-      output = smoothed
+    counts = counts_hsh.sort_by{|year, val| year}.map{|ary| ary[1].value.to_f}
+    totals = totals_hsh.sort_by{|year, val| year}.map{|ary| ary[1].value.to_f}
+    
+    output = []
+    number_of_years = years.size
+    
+    number_of_years.times do |ix|
+      lower = [0, ix - smoothing].max
+      upper = [number_of_years - 1, ix + smoothing].min
+      output << counts[lower..upper].sum / totals[lower..upper].sum
     end
     
     output
