@@ -5,7 +5,7 @@ class ArticlesController < ApplicationController
   def ngram_calculator
     terms = get_terms_from_params
     
-    smoothing_factor = params[:s].to_i
+    smoothing_factor = params[:s].blank? ? 1 : params[:s].to_i
     
     hsh = if terms.blank?
       {:error => "Enter something!"}

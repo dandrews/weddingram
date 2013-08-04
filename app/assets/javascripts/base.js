@@ -29,7 +29,8 @@ $(function() {
       }
       
       query = $this.find('#q').val();
-      smooth = $this.find('#s').val();
+      smooth = data["smoothing"]
+      $this.find('#s').val(smooth);
       filename = 'Weddingram_' + query.replace(RegExp(/[^A-Za-z0-9]/g), '').substr(0, 20);
       
       var series, term, terms, _i, _len;
@@ -163,9 +164,24 @@ $(function() {
     }
   });
   
-  if ($('#q').val()) {
-    $('#ngramSubmit').submit();
-  } else {
-    $("#randomSearch").click();
+  if (!$('#blank').val()) {
+    if ($('#q').val()) {
+      $('#ngramSubmit').submit();
+    } else {
+      $("#randomSearch").click();
+    }
   }
+  
+  $(".smoothing").popover({
+    trigger: 'hover',
+    placement: 'left',
+    content: 'A smoothing value of 1 means that the data shown for 1990 will be the average of 1989, 1990, and 1991. In general you should use higher values of smoothing when you search for less common terms. Set smoothing to 0 if you want the raw data'
+  });
+  
+  $(".caseSensitive").popover({
+    trigger: 'hover',
+    placement: 'right',
+    html: true,
+    content: "Searching for <i>brown</i> is not the same thing as searching for <i>Brown</i>!"
+  });
 });

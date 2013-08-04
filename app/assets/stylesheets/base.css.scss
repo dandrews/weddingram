@@ -2,6 +2,7 @@
 @import "bootstrap-responsive";
 
 .page-header {
+  margin-bottom: 20px;
   .logo {
     color: #333333;
     text-decoration: none;
@@ -21,17 +22,14 @@
 }
 
 #ngramForm {
-  #q { width: 489px; }
+  #q { width: 489px; margin-right: 10px; }
   #s { width: 30px; }
   
   .searchParams {
     margin-bottom: 10px;
-    margin-right: 10px;
   }
   
-  .smoothing {
-    margin-left: 10px;
-  }
+  #ngramSubmit { margin-right: 10px; }
 }
 
 #articleSummaries {
@@ -70,4 +68,8 @@
       }
     }
   }
+}
+
+.hasPopover {
+  border-bottom: 1px dotted #999;
 }
