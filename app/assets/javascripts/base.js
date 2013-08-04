@@ -8,10 +8,6 @@ $(function() {
     return keys;
   };
   
-  if ($('#q').val()) {
-    $('#ngramSubmit').submit();
-  }
-  
   $('#ngramForm').on({
     'ajax:error': function() {
       alert("WHOOPS! Something went wrong, try again")
@@ -161,4 +157,10 @@ $(function() {
       });
     }
   });
+  
+  if ($('#q').val()) {
+    $('#ngramSubmit').submit();
+  } else {
+    $("#randomSearch").click();
+  }
 });
