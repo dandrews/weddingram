@@ -1,14 +1,18 @@
-<h4 id="tagline"><%= Tagline.random %></h4>
+<div class="span12">
+  <div class="page-header">
+    <h1>Weddingram <small id="tagline"><%= Tagline.random %></small></h1>
+  </div>
 
-<p>Enter some <strong>case-sensitive</strong> comma-separated phrases to search:</p>
+  <p>Enter some <strong>case-sensitive</strong> comma-separated phrases to search:</p>
 
-<%= form_tag ngram_calculator_path, :method => :get, :remote => true, :id => 'ngramForm' do %>
-  <%= search_field_tag :q, params[:q], :maxlength => 10_000 %>
-  <span class="smoothing">Smoothing:</span>
-  <%= number_field_tag :s, params[:s] || 1, :min => 0, :max => 5 %>
-  <%= submit_tag "Search NYT Weddings & Celebrations", :id => "ngramSubmit", :class => "btn" %>
-<% end %>
+  <%= form_tag ngram_calculator_path, :method => :get, :remote => true, :id => 'ngramForm', :class => "form-search" do %>
+    <%= search_field_tag :q, params[:q], :maxlength => 10_000 %>
+    <%= submit_tag "Search NYT Weddings & Celebrations", :id => "ngramSubmit", :class => "btn btn-info" %>
+    <span class="smoothing">Smoothing:</span>
+    <%= number_field_tag :s, params[:s] || 1, :min => 0, :max => 5 %>
+  <% end %>
 
-<div id="ngramContainer"></div>
+  <div id="ngramContainer"></div>
 
-<div id="articleSummaries"></div>
+  <div id="articleSummaries"></div>
+</div>

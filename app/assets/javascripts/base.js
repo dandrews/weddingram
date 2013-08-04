@@ -142,4 +142,13 @@ $(function() {
       });
     }
   });
+  
+  $("#articleSummaries").on("click", ".moreArticles", function() {
+    var $this = $(this).closest("#articleSummaries")
+    var query = $('#ngramForm #q').val();
+    
+    $.get("/articles/search", { q: query }, function(data) {
+      $this.html(data)
+    });
+  });
 });

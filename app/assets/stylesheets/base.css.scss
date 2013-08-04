@@ -1,34 +1,35 @@
 @import "bootstrap";
+@import "bootstrap-responsive";
+
+#tagline {
+  padding-bottom: 12px;
+}
 
 #ngramContainer {
-  width: 800px;
-  height: 400px;
+  height: 450px;
   margin-bottom: 10px;
 }
 
 #ngramForm {
-  #q { width: 250px; }
+  #q { width: 300px; }
   #s { width: 30px; }
   
   .smoothing {
     margin-left: 10px;
-    position: relative;
-    top: -5px;
   }
   
   #ngramSubmit {
     margin-left: 10px;
-    position: relative;
-    top: -5px;
   }
 }
 
 #articleSummaries {
-  width: 100%;
   border-top: 1px solid #ccc;
   
+  .moreArticles { margin-left: 30px; }
+  
   .articleSummary {
-    width: 500px;
+    max-width: 620px;
     margin-bottom: 20px;
     
     .image {
@@ -44,7 +45,7 @@
     
     .details {
       float: left;
-      max-width: 80%;
+      max-width: 70%;
       padding-left: 18px;
       
       .title {

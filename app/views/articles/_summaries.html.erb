@@ -1,4 +1,7 @@
-<h4>A few articles matching at least one of your search terms:</h4>
+<h4>
+  A few articles matching at least one of your search terms:
+  <span class="btn btn-small moreArticles"><i class="icon-refresh"></i> See more articles</span>
+</h4>
 
 <% articles.each do |article| %>
   <%= render 'summary', :article => article %>

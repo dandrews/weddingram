@@ -4,7 +4,7 @@ class Tagline
   
   def self.random
     phrase = $redis.srandmember(TAGLINES_KEY).presence || fallback
-    "#{BASE} #{phrase}"
+    "#{BASE}#{phrase.starts_with?("'") ? '' : ' '}#{phrase}"
   end
   
   def self.fallback
