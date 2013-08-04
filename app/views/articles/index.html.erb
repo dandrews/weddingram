@@ -1,3 +1,5 @@
+<h4 id="tagline"><%= Tagline.random %></h4>
+
 <p>Enter some <strong>case-sensitive</strong> comma-separated phrases to search:</p>
 
 <%= form_tag ngram_calculator_path, :method => :get, :remote => true, :id => 'ngramForm' do %>

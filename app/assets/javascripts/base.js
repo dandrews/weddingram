@@ -23,6 +23,10 @@ $(function() {
       var $this, query;
       $this = $(this);
       
+      if (data["tagline"]) {
+        $("#tagline").html(data["tagline"]);
+      }
+      
       query = $this.find('#q').val();
       smooth = $this.find('#s').val();
       

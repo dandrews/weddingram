@@ -36,7 +36,7 @@ class Article < ActiveRecord::Base
       hsh
     end
     
-    {:terms => terms_hsh, :years => all_years, :smoothing => smoothing}
+    {:terms => terms_hsh, :years => all_years, :smoothing => smoothing, :tagline => Tagline.random}
   end
   
   # TO DO: cleanup, pipelined where possible
