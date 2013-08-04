@@ -20,7 +20,7 @@ $(function() {
       $("#articleSummaries").empty()
     },
     'ajax:success': function(xhr, data, status) {
-      var $this, query;
+      var $this, query, filename;
       $this = $(this);
       
       if (data["tagline"]) {
@@ -29,6 +29,7 @@ $(function() {
       
       query = $this.find('#q').val();
       smooth = $this.find('#s').val();
+      filename = 'Weddingram_' + query.replace(RegExp(/[^A-Za-z0-9]/g), '').substr(0, 20);
       
       var series, term, terms, _i, _len;
       if (data["error"]) {
@@ -56,7 +57,17 @@ $(function() {
       
       $('#ngramContainer').highcharts({
         tooltip: {
-          enabled: false
+          enabled: true,
+          shared: true,
+          formatter: function() {
+            var s = '<b>' + this.x + '</b>'
+            $.each(this.points, function(i, point) {
+              s += '<br/><span style="color: ' + point["series"]["color"] + '">' +
+                    point.series.name + ':</span> ' +
+                    Math.round(100 * point.y * 1000000) / 1000000 + '%'
+            });
+            return s;
+          }
         },
         xAxis: {
           categories: data["years"],
@@ -84,7 +95,12 @@ $(function() {
           }
         },
         title: {
-          text: terms.join(", ")
+          text: terms.join(", "),
+          style: {
+            fontSize: '18px',
+            lineHeight: '18px'
+          },
+          margin: 15
         },
         subtitle: {
           text: "Smoothing Factor " + data["smoothing"]
@@ -94,13 +110,28 @@ $(function() {
           layout: "horizontal",
           align: "center",
           verticalAlign: "bottom",
-          borderWidth: 0
+          borderWidth: 0,
+          itemStyle: {
+            fontSize: '14px'
+          }
         },
         plotOptions: {
           series: {
             animation: false,
             marker: {
               enabled: false
+            }
+          }
+        },
+        exporting: {
+          filename: filename,
+          buttons: {
+            contextButton: {
+              symbol: false,
+              text: 'Save as PNG',
+              onclick: function() {
+                this.exportChart();
+              }
             }
           }
         }
