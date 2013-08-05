@@ -31,7 +31,7 @@ $(function() {
       query = $this.find('#q').val();
       smooth = data["smoothing"]
       $this.find('#s').val(smooth);
-      filename = 'Weddingram_' + query.replace(RegExp(/[^A-Za-z0-9]/g), '').substr(0, 20);
+      filename = (NAME_OF_SITE + '_' + query).replace(/[^A-Za-z0-9_]/g, '').substr(0, 40);
       
       var series, term, terms, _i, _len;
       if (data["error"]) {
@@ -43,7 +43,7 @@ $(function() {
       }
       
       if (history.pushState) {
-        window.history.pushState(null, null, "/?q=" + query + "&s=" + smooth);
+        window.history.pushState(null, null, "/?q=" + encodeURIComponent(query) + "&s=" + smooth);
       }
       
       terms = getKeys(data["terms"]);
@@ -130,7 +130,7 @@ $(function() {
           buttons: {
             contextButton: {
               symbol: false,
-              text: 'Save as PNG',
+              text: 'Download Graph',
               onclick: function() {
                 this.exportChart();
               }
@@ -161,6 +161,7 @@ $(function() {
         $("#ngramForm #s").val(data["smoothing"]);
         $("#ngramForm").submit();
       });
+      return false;
     }
   });
   

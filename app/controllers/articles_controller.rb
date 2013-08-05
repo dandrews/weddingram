@@ -11,7 +11,7 @@ class ArticlesController < ApplicationController
       {:error => "Enter something!"}
     elsif terms.size > 8
       {:error => "You can't enter more than 8 things!"}
-    elsif terms.any?{|t| t.split(" ").size > Article::MAX_NGRAM_SIZE}
+    elsif terms.any?{|t| t.is_too_long_to_be_a_valid_query?}
       {:error => "Max ngram size is #{Article::MAX_NGRAM_SIZE}"}
     elsif smoothing_factor < 0 || smoothing_factor > 5
       {:error => "Smoothing Factor must be between 0 and 5"}

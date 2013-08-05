@@ -19,4 +19,8 @@ module ApplicationHelper
   def chartbeat_footer
     return unless Rails.env.production?
   end
+  
+  def name_of_site
+    "Wedding Crunchers"
+  end
 end

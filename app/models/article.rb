@@ -30,8 +30,11 @@ class Article < ActiveRecord::Base
     nil
   end
   
+  ALLOWED_MATH_OPERATORS = ["+", "/", "(", ")"]
+  
   def self.get_terms_from_query_string(qry)
-    qry.split(",").map{|t| t.squish.gsub(/[^[[:word:]]\s\-\&]/, '')}
+    regex = %r{[^[[:word:]]\s\-\&#{ALLOWED_MATH_OPERATORS.join('')}]}
+    qry.split(",").map{|t| t.squish.gsub(regex, '')}
   end
   
   def self.from_redis(string)
@@ -49,14 +52,43 @@ class Article < ActiveRecord::Base
   
   def self.ngram_query(terms, smoothing = 1)
     terms_hsh = terms.inject(ActiveSupport::OrderedHash.new) do |hsh, term|
-      hsh[term] = inner_query(term, smoothing)
+      key = term.dup
+      hsh[key] = inner_query(term, smoothing)
       hsh
     end
     
     {:terms => terms_hsh, :years => all_years, :smoothing => smoothing, :tagline => Tagline.random}
   end
   
+  def self.equation_query(equation, smoothing)
+    individual_terms = equation.split(%r{[#{ALLOWED_MATH_OPERATORS.join('')}]}).map(&:squish).uniq.select(&:present?)
+    raise 'equation is too big!' if individual_terms.size > 10
+    
+    data_hsh = individual_terms.inject({}) do |hsh, t|
+      hsh[t] = inner_query(t, smoothing)
+      hsh
+    end
+    
+    years = all_years
+    output = []
+    
+    years.size.times do |ix|
+      e = equation.dup
+      data_hsh.keys.each do |t|
+        e.gsub!(/\b#{t}\b/, data_hsh[t][ix].to_s)
+      end
+      
+      raw_value = eval(e)
+      
+      output << (raw_value.infinite? ? nil : raw_value)
+    end
+    
+    return output
+  end
+  
   def self.inner_query(term, smoothing)
+    return equation_query(term, smoothing) if term.is_equation?
+    
     term.squish!
     n = term.split(" ").size
     
