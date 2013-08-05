@@ -13,6 +13,21 @@
   
   #tagline {
     padding-bottom: 12px;
+    
+    .rotating {
+      color: #666;
+      border-bottom: 1px solid #666;
+      padding-right: 5px;
+    }
+    
+    .rotating, .refreshTagline {
+      &:hover { cursor: pointer; }
+    }
+    
+    .refreshTagline {
+      position: relative;
+      top: 8px;
+    }
   }
 }
 

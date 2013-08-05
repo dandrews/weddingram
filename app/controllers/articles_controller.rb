@@ -35,6 +35,10 @@ class ArticlesController < ApplicationController
     render :json => Article.recommended_query_hsh
   end
   
+  def tagline
+    render :text => Tagline.random
+  end
+  
   private
   
   def get_terms_from_params

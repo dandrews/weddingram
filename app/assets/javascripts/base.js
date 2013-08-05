@@ -20,7 +20,7 @@ $(function() {
       $this = $(this);
       
       if (data["tagline"]) {
-        var tag = $("#tagline")
+        var tag = $("#tagline .rotating")
         if (tag.hasClass("keep")) {
           tag.removeClass("keep");
         } else {
@@ -162,6 +162,14 @@ $(function() {
         $("#ngramForm").submit();
       });
       return false;
+    }
+  });
+  
+  $(".rotating, .refreshTagline").on({
+    click: function() {
+      $.get("/articles/tagline", function(data) {
+        $("#tagline .rotating").html(data);
+      })
     }
   });
   
