@@ -34,7 +34,7 @@ class Article < ActiveRecord::Base
   
   def self.get_terms_from_query_string(qry)
     regex = %r{[^[[:word:]]\s\-\&#{ALLOWED_MATH_OPERATORS.join('')}]}
-    qry.split(",").map{|t| t.squish.gsub(regex, '')}
+    qry.split(",").map{|t| t.squish.gsub(regex, '')}.select(&:present?)
   end
   
   def self.from_redis(string)
