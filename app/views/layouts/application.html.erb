@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <%=raw chartbeat_header %>
   <title><%= name_of_site %></title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
   <%= javascript_tag "var NAME_OF_SITE = '#{name_of_site}';" %>
+  <%=raw google_analytics %>
 </head>
 <body>
   <div id="fb-root"></div>
@@ -20,5 +22,7 @@
   <div class="container-fluid">
     <%= yield %>
   </div>
+  
+  <%=raw chartbeat_footer %>
 </body>
 </html>

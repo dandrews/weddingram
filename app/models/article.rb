@@ -154,7 +154,7 @@ class Article < ActiveRecord::Base
     
     scope_without_exact = Article.unscoped.select("id").where(:is_wedding => true).
                         where(full_text_conditions).
-                        limit(250)
+                        limit(100)
                         
     inner_sql_without_exact = scope_without_exact.to_sql
     inner_sql_with_exact = scope_without_exact.where(exact_conditions).to_sql
