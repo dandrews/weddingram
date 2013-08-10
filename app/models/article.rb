@@ -9,12 +9,12 @@ class Article < ActiveRecord::Base
   
   default_scope select(DEFAULT_COLUMNS_TO_INCLUDE).where(:is_wedding => true)
   
-  def self.ngram_redis
+  def self.redis
     $redis
   end
   
   def self.all_years
-    ngram_redis.zrange(NGRAM_ALL_YEARS_KEY, 0, 100).map(&:to_i)
+    redis.zrange(NGRAM_ALL_YEARS_KEY, 0, 100).map(&:to_i)
     # (1981..2013).to_a
   end
   
@@ -24,7 +24,7 @@ class Article < ActiveRecord::Base
   
   def self.pretty_ngram_summary(year, n, options = {})
     key = sorted_set_key(year, n)
-    raw = ngram_redis.zrevrange(key, options[:offset] || 0, (options[:limit] || 10) - 1, :with_scores => true)
+    raw = redis.zrevrange(key, options[:offset] || 0, (options[:limit] || 10) - 1, :with_scores => true)
     
     raw.each_slice(2){|ary| puts "#{ary[0]} => #{ary[1].to_i}"}
     nil
@@ -47,7 +47,7 @@ class Article < ActiveRecord::Base
   end
   
   def self.recommended_query_hsh
-    from_redis(Article.ngram_redis.srandmember("recommended_searches") || "Yale, Harvard, Princeton::1")
+    from_redis(Article.redis.srandmember("recommended_searches") || "Yale, Harvard, Princeton::1")
   end
   
   def self.ngram_query(terms, smoothing = 1)
@@ -96,12 +96,12 @@ class Article < ActiveRecord::Base
     
     counts_hsh, totals_hsh = {}, {}
     
-    Article.ngram_redis.pipelined do
+    Article.redis.pipelined do
       years.each do |year|
         key = Article.sorted_set_key(year, n)
         
-        counts_hsh[year] = Article.ngram_redis.zscore(key, term)
-        totals_hsh[year] = Article.ngram_redis.zscore(Article::TOTAL_KEY, key)
+        counts_hsh[year] = Article.redis.zscore(key, term)
+        totals_hsh[year] = Article.redis.zscore(Article::TOTAL_KEY, key)
       end
     end
     

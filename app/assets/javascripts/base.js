@@ -8,6 +8,23 @@ $(function() {
     return keys;
   };
   
+  var setupTweetButton = function() {
+    $("#tweetButton iframe").remove();
+    var tweetMessage = $("#q").val() || 'Analyzing trends over 30+ years of The New York Times Weddings & Celebrations announcements!'
+    var tweetContent = ('NYT #WeddingCrunchers - ' + tweetMessage).substr(0, 119);
+    var newButton = $("<a></a>").addClass("twitter-share-button").
+                                 attr("href", "http://twitter.com/share").
+                                 attr("data-url", window.location.href).
+                                 attr("data-text", tweetContent);
+
+    $("#tweetButton").append(newButton);
+    twttr.widgets.load();
+  };
+  
+  $.getScript("//platform.twitter.com/widgets.js", function() {
+    // setupTweetButton();
+  });
+  
   $('#ngramForm').on({
     'ajax:error': function() {
       alert("WHOOPS! Something went wrong, try again")
@@ -63,10 +80,15 @@ $(function() {
           shared: true,
           formatter: function() {
             var s = '<b>' + this.x + '</b>'
-            $.each(this.points, function(i, point) {
+            
+            var sortedPoints = this.points.sort(function(a, b) {
+              return ((a.y < b.y) ? 1 : ((a.y > b.y) ? -1 : 0));
+            });
+            
+            $.each(sortedPoints, function(i, point) {
               s += '<br/><span style="color: ' + point["series"]["color"] + '">' +
                     point.series.name + ':</span> ' +
-                    Math.round(100 * point.y * 1000000) / 1000000 + '%'
+                    Math.round(100 * point.y * 100000) / 100000 + '%'
             });
             return s;
           }
@@ -93,7 +115,7 @@ $(function() {
             }
           },
           title: {
-            text: ""
+            text: "NYT Frequency"
           }
         },
         title: {
@@ -142,6 +164,8 @@ $(function() {
       $.get("/articles/search", { q: query }, function(data) {
         $("#articleSummaries").html(data)
       });
+      
+      // setupTweetButton();
     }
   });
   
@@ -192,5 +216,11 @@ $(function() {
     placement: 'right',
     html: true,
     content: "Searching for <i>brown</i> is not the same thing as searching for <i>Brown</i>!"
+  });
+  
+  $("#exportGraph").on({
+    click: function() {
+      $("#ngramContainer .highcharts-button").click();
+    }
   });
 });

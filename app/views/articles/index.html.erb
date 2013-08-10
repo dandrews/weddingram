@@ -12,20 +12,31 @@
 
   <p>Enter some <strong class="caseSensitive hasPopover">case-sensitive</strong> comma-separated phrases to search:</p>
 
-  <%= form_tag ngram_calculator_path, :method => :get, :remote => true, :id => 'ngramForm', :class => "form-search" do %>
-    <div class="searchParams">
-      <%= search_field_tag :q, params[:q], :maxlength => 10_000, :tabindex => 1 %>
-      <span class="smoothing">Smoothing <span class="hasPopover">(?)</span>:</span>
-      <%= number_field_tag :s, params[:s] || 1, :min => 0, :max => 5, :tabindex => 4 %>
-    </div>
-    <div class="submitButtons">
-      <%= submit_tag "Search NYT Weddings & Celebrations", :id => "ngramSubmit", :class => "btn btn-info", :tabindex => 2 %>
-      <button id="randomSearch" class="btn" tabindex="3">Just tell me what to search for!</span>
-    </div>
-    
-    <%= hidden_field_tag :blank, params[:blank] %>
-  <% end %>
+  <div class="form-container">
+    <%= form_tag ngram_calculator_path, :method => :get, :remote => true, :id => 'ngramForm', :class => "form-search" do %>
+      <div class="searchParams">
+        <%= search_field_tag :q, params[:q], :maxlength => 10_000, :tabindex => 1 %>
+        <span class="smoothing">Smoothing <span class="hasPopover">(?)</span>:</span>
+        <%= number_field_tag :s, params[:s] || 1, :min => 0, :max => 5, :tabindex => 4 %>
+      </div>
 
+      <div class="submitButtons">
+        <%= submit_tag "Search NYT Weddings & Celebrations", :id => "ngramSubmit", :class => "btn btn-info", :tabindex => 2 %>
+        <button id="randomSearch" class="btn" tabindex="3">Just tell me what to search for!</button>
+      </div>
+
+      <%= hidden_field_tag :blank, params[:blank] %>
+    <% end %>
+  </div>
+  
+  <div class="socialLinks">
+    <div id="tweetButton"></div>
+    <!-- <div class="fb-like" data-href="http://www.weddingcrunchers.com" data-width="90" data-layout="button_count" data-show-faces="false" data-send="false"></div> -->
+    <div id="exportGraph" class="btn btn-small"><i class="icon-download"></i>Save Graph</div>
+  </div>
+  
+  <div class="clearfix"></div>
+  
   <div id="ngramContainer"></div>
 
   <div id="articleSummaries"></div>
