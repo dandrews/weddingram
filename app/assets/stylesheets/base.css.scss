@@ -46,18 +46,36 @@
 #ngramForm {
   margin: 0;
   
-  #q { width: 489px; margin-right: 10px; }
-  #s { width: 30px; }
+  #q { width: 100%; }
   
-  .searchParams { margin-bottom: 10px; }
+  #s { width: 25px; }
   
-  #ngramSubmit { margin-right: 10px; }
+  .searchQuery {
+    margin: 0 25px 0 0;
+  }
+  
+  .smoothingInput {
+    width: 140px;
+    float: left;
+  }
+  
+  .smoothing {
+    display: inline;
+    position: relative;
+    top: -5px;
+  }
+  
+  .submitButtons {
+    margin-left: 0px;
+    #ngramSubmit { margin-right: 10px; }
+  }
 }
 
 .socialLinks {
   float: right;
   width: 95px;
-  padding: 0 10px 0 10px;
+  padding: 0 5px 0 10px;
+  margin-left: 20px;
   
   #exportGraph {
     padding: 0 4px 0 4px;

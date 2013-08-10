@@ -13,16 +13,25 @@
   <p>Enter some <strong class="caseSensitive hasPopover">case-sensitive</strong> comma-separated phrases to search:</p>
 
   <div class="form-container">
-    <%= form_tag ngram_calculator_path, :method => :get, :remote => true, :id => 'ngramForm', :class => "form-search" do %>
-      <div class="searchParams">
+    <%= form_tag ngram_calculator_path, :method => :get, :remote => true, :id => 'ngramForm' do %>
+      <div class="searchQuery span7">
         <%= search_field_tag :q, params[:q], :maxlength => 10_000, :tabindex => 1 %>
-        <span class="smoothing">Smoothing <span class="hasPopover">(?)</span>:</span>
+      </div>
+      
+      <div class="smoothingInput">
+        <label for="s" class="smoothing">Smoothing <span class="hasPopover">(?)</span>:</label>
         <%= number_field_tag :s, params[:s] || 1, :min => 0, :max => 5, :tabindex => 4 %>
       </div>
+      
+      <div class="clearfix"></div>
 
-      <div class="submitButtons">
-        <%= submit_tag "Search NYT Weddings & Celebrations", :id => "ngramSubmit", :class => "btn btn-info", :tabindex => 2 %>
-        <button id="randomSearch" class="btn" tabindex="3">Just tell me what to search for!</button>
+      <div class="submitButtons span9">
+        <%= submit_tag "Search NYT Weddings", :id => "ngramSubmit", :class => "btn btn-info btn-small", :tabindex => 2 %>
+        
+        <button id="randomSearch" class="btn btn-small" tabindex="3">
+          <i class="icon-refresh"></i>
+          Just show me a good search!
+        </button>
       </div>
 
       <%= hidden_field_tag :blank, params[:blank] %>
