@@ -211,11 +211,11 @@ $(function() {
     content: 'A smoothing value of 1 means that the data shown for 1990 will be the average of 1989, 1990, and 1991. In general you should use higher values of smoothing when you search for less common terms. Set smoothing to 0 if you want the raw data'
   });
   
-  $(".caseSensitive").popover({
+  $(".commaSeparated").popover({
     trigger: 'hover',
     placement: 'right',
     html: true,
-    content: "Searching for <i>brown</i> is not the same thing as searching for <i>Brown</i>!"
+    content: "Search terms are <i>not</i> case sensitive"
   });
   
   $("#exportGraph").on({

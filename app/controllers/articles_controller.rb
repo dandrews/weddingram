@@ -3,20 +3,15 @@ class ArticlesController < ApplicationController
   end
   
   def ngram_calculator
-    terms = get_terms_from_params
+    raise 'xhr only' unless request.xhr?
     
+    terms = get_terms_from_params
     smoothing_factor = params[:s].blank? ? 1 : params[:s].to_i
     
-    hsh = if terms.blank?
-      {:error => "Enter something!"}
-    elsif terms.size > 8
-      {:error => "You can't enter more than 8 things!"}
-    elsif terms.any?{|t| t.is_too_long_to_be_a_valid_query?}
-      {:error => "Max ngram size is #{Article::MAX_NGRAM_SIZE}"}
-    elsif smoothing_factor < 0 || smoothing_factor > 5
-      {:error => "Smoothing Factor must be between 0 and 5"}
+    hsh = if (err = determine_if_any_errors(terms, smoothing_factor)).present?
+      { :error => err }
     else
-      Article.ngram_query(terms, smoothing_factor)
+      Article.ngram_query(terms, :smoothing => smoothing_factor)
     end
     
     hsh[:error] = "Something went wrong" if hsh.blank?
@@ -25,7 +20,11 @@ class ArticlesController < ApplicationController
   end
   
   def search
+    raise 'xhr only' unless request.xhr?
+    
     terms = get_terms_from_params
+    raise 'invalid search terms' if determine_if_any_errors(terms).present?
+    
     articles = Article.full_text_search(terms, :limit => 3)
     
     render :text => render_to_string(:partial => 'summaries', :locals => {:articles => articles})
@@ -43,5 +42,17 @@ class ArticlesController < ApplicationController
   
   def get_terms_from_params
     Article.get_terms_from_query_string(params[:q])
+  end
+  
+  def determine_if_any_errors(terms, smoothing_factor = 1)
+    if terms.blank?
+      "Enter something!"
+    elsif terms.size > 8
+      "You can't enter more than 8 things!"
+    elsif terms.any?{|t| t.is_too_long_to_be_a_valid_query?}
+      "Max ngram size is #{Article::MAX_NGRAM_SIZE}"
+    elsif smoothing_factor < 0 || smoothing_factor > 5
+      "Smoothing Factor must be between 0 and 5"
+    end
   end
 end

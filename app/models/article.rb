@@ -50,10 +50,15 @@ class Article < ActiveRecord::Base
     from_redis(Article.redis.srandmember("recommended_searches") || "Yale, Harvard, Princeton::1")
   end
   
-  def self.ngram_query(terms, smoothing = 1)
+  def self.ngram_query(terms, opts = {})
+    smoothing = opts[:smoothing] || 1
+    case_sensitive = false
+    
+    preprocess_method = case_sensitive ? :to_s : :downcase
+    
     terms_hsh = terms.inject(ActiveSupport::OrderedHash.new) do |hsh, term|
       key = term.dup
-      hsh[key] = inner_query(term, smoothing)
+      hsh[key] = inner_query(term.send(preprocess_method), smoothing)
       hsh
     end
     
@@ -120,7 +125,7 @@ class Article < ActiveRecord::Base
     output
   end
   
-  def self.search(terms, opts = {})
+  def self.simple_search(terms, opts = {})
     limit = opts[:limit] || 3
     n = terms.size
     qry_text = ""
@@ -129,7 +134,7 @@ class Article < ActiveRecord::Base
       qry_text << "#{' OR' if ix > 0} stripped_text LIKE ?"
     end
     
-    conditions = [qry_text] + terms.map{|t| "%#{t}%" }
+    conditions = [qry_text] + terms.map{|t| "%#{t.downcase}%" }
     
     Article.where(conditions).
             order("random()").
@@ -137,6 +142,8 @@ class Article < ActiveRecord::Base
   end
   
   def self.full_text_search(terms, opts = {})
+    terms = terms.map(&:split_into_equation_components).flatten.uniq.select(&:present?)
+    
     limit = opts[:limit] || 3
     n = terms.size
     
@@ -150,7 +157,7 @@ class Article < ActiveRecord::Base
     end
     
     full_text_conditions = ["to_tsvector('english', article_text) @@ to_tsquery(?)", ts_query_arg]
-    exact_conditions = [exact_qry_text] + terms.map{|t| "%#{t}%" }
+    exact_conditions = [exact_qry_text] + terms.map{|t| "%#{t.downcase}%" }
     
     scope_without_exact = Article.unscoped.select("id").where(:is_wedding => true).
                         where(full_text_conditions).
