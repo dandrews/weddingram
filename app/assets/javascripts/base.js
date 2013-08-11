@@ -61,9 +61,11 @@ $(function() {
         return false;
       }
       
-      if (history.pushState) {
+      if (history && history.pushState && !$this.hasClass("noPush")) {
         window.history.pushState(null, null, "/?q=" + encodeURIComponent(query) + "&s=" + smooth);
       }
+      
+      $this.removeClass("noPush")
       
       terms = getKeys(data["terms"]);
       series = [];
@@ -220,4 +222,13 @@ $(function() {
       $("#ngramContainer .highcharts-button").click();
     }
   });
+  
+  if (history && history.pushState) {
+    $(window).bind("popstate", function() {
+      $("#q").val(getParameterByName("q"));
+      $("#s").val(getParameterByName("s"));
+      $("#ngramForm").addClass("noPush")
+      $("#ngramSubmit").submit();
+    });
+  }
 });
