@@ -211,7 +211,7 @@ $(function() {
   
   $(".smoothing").popover({
     trigger: 'hover',
-    placement: 'right',
+    placement: 'bottom',
     content: 'A smoothing value of 1 means that the data shown for 1990 will be the average of 1989, 1990, and 1991. In general you should use higher values of smoothing when you search for less common terms. Set smoothing to 0 if you want the raw data'
   });
   

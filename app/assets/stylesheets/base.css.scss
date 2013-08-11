@@ -67,12 +67,14 @@
   #s { width: 25px; }
   
   .searchQuery {
-    margin: 0 25px 0 0;
+    float: left;
+    margin: 0 10px 0 0;
   }
   
   .smoothingInput {
     width: 140px;
     float: left;
+    margin-right: 73px;
   }
   
   .smoothing {
@@ -89,7 +91,6 @@
 
 .socialLinks {
   float: left;
-  margin-left: 73px;
   
   #exportGraph {
     padding: 0 4px 0 4px;
