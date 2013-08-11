@@ -25,6 +25,8 @@ $(function() {
     // setupTweetButton();
   });
   
+  $("#q").autoGrow(40);
+  
   $('#ngramForm').on({
     'ajax:error': function() {
       alert("WHOOPS! Something went wrong, try again")
@@ -179,7 +181,9 @@ $(function() {
   });
   
   $('#randomSearch').on({
-    click: function() {
+    click: function(e) {
+      e.preventDefault();
+      
       $.get("/articles/random", function(data) {
         $("#ngramForm #q").val(data["raw"]);
         $("#ngramForm #s").val(data["smoothing"]);
@@ -207,15 +211,8 @@ $(function() {
   
   $(".smoothing").popover({
     trigger: 'hover',
-    placement: 'left',
-    content: 'A smoothing value of 1 means that the data shown for 1990 will be the average of 1989, 1990, and 1991. In general you should use higher values of smoothing when you search for less common terms. Set smoothing to 0 if you want the raw data'
-  });
-  
-  $(".commaSeparated").popover({
-    trigger: 'hover',
     placement: 'right',
-    html: true,
-    content: "Search terms are <i>not</i> case sensitive"
+    content: 'A smoothing value of 1 means that the data shown for 1990 will be the average of 1989, 1990, and 1991. In general you should use higher values of smoothing when you search for less common terms. Set smoothing to 0 if you want the raw data'
   });
   
   $("#exportGraph").on({

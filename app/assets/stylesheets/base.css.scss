@@ -2,7 +2,10 @@
 @import "bootstrap-responsive";
 
 .page-header {
-  margin-bottom: 20px;
+  h1 { line-height: 32px; }
+  
+  margin-bottom: 10px;
+  
   .logo {
     color: #333333;
     text-decoration: none;
@@ -31,6 +34,11 @@
   }
 }
 
+.moreInfo {
+  border-top: 1px solid #eeeeee;
+  padding-top: 10px;
+}
+
 #ngramContainer {
   height: 450px;
   margin-bottom: 10px;
@@ -43,10 +51,18 @@
   margin-bottom: 5px;
 }
 
+#randomSearch {
+  padding: 4px;
+  border-radius: 5px;
+}
+
 #ngramForm {
   margin: 0;
   
-  #q { width: 100%; }
+  #q {
+    min-width: 200px;
+    max-width: 600px;
+  }
   
   #s { width: 25px; }
   
@@ -72,16 +88,23 @@
 }
 
 .socialLinks {
-  float: right;
-  width: 95px;
-  padding: 0 5px 0 10px;
-  margin-left: 20px;
+  float: left;
+  margin-left: 73px;
   
   #exportGraph {
     padding: 0 4px 0 4px;
+    position: relative;
+    top: -1px;
   }
   
-  #tweetButton, .fb-like { padding-bottom: 2px; }
+  #tweetButton, .fb-like {
+    position: relative;
+    top: 5px;
+  }
+  
+  .fb-like {
+    right: 15px;
+  }
 }
 
 #articleSummaries {
