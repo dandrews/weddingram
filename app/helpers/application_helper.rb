@@ -45,4 +45,8 @@ module ApplicationHelper
   def name_of_site
     "Wedding Crunchers"
   end
+  
+  def writeup_url
+    "http://rapgenius.com/"
+  end
 end

@@ -9,8 +9,9 @@
       </small>
     </h1>
   </div>
-
-  <p>Enter some <strong class="commaSeparated hasPopover">comma-separated</strong> phrases to search:</p>
+  
+  <p>Read the full writeup on <%= link_to "Rap Genius", writeup_url, :target => "_blank" %> | <%= link_to "About", "/about" %></p>
+  <p>Enter some phrases to search:</p>
 
   <div class="form-container">
     <%= form_tag ngram_calculator_path, :method => :get, :remote => true, :id => 'ngramForm' do %>

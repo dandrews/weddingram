@@ -125,3 +125,11 @@
 .hasPopover {
   border-bottom: 1px dotted #999;
 }
+
+#faq {
+  dd { margin-bottom: 20px; }
+  dt.first {
+    font-size: 135%;
+    margin-bottom: 5px;
+  }
+}
