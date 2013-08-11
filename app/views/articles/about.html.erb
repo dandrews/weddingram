@@ -22,6 +22,12 @@
         <dt>What about punctuation and case sensitivity?</dt>
         <dd>Wedding Crunchers is <em>not</em> case sensitive. Most punctuation is stripped out for you automatically, so you don't have to worry about it. Ampersands (<code>&</code>) are not stripped out, so include them if you're looking for law firms!</dd>
 
+        <dt>What does the y-axis mean exactly?</dt>
+        <dd>The y-axis represents the frequency of each phrase, as a percentage of all phrases that contain the same number of words. For example, if you search for <code>from New York</code>, the graph shows the number of times those words appear in exact order, divided by the total number of 3 word phrases in all of the articles</dd>
+
+        <dt>And what is "smoothing"?</dt>
+        <dd>Smoothing is a way to take moving averages, which can help identify trends in noisy data. If you set smoothing to 1, it means that at each year, the value graphed is the average of that year and the 1 year before and after. In general smoothing 1 is a good default, sometimes for less common terms you might want to use smoothing 2, or if you want to see the raw data, then smoothing 0</dd>
+
         <dt>Any other cool features?</dt>
         <dd>Sure, if you want to get fancy, you can use <code>+</code> and <code>/</code> to build advanced searches. Check out some of the recommended searches for examples</dd>
 
