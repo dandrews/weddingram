@@ -8,6 +8,9 @@ $(function() {
     return keys;
   };
   
+  // Chrome fires popstate on page load, Firefox doesn't
+  var popstateReady = false;
+  
   var setupTweetButton = function() {
     $("#tweetButton iframe").remove();
     var tweetMessage = $("#q").val() || 'Analyzing trends over 30+ years of The New York Times Weddings & Celebrations announcements!'
@@ -62,6 +65,7 @@ $(function() {
       }
       
       if (history && history.pushState && !$this.hasClass("noPush")) {
+        popstateReady = true;
         window.history.pushState(null, null, "/?q=" + encodeURIComponent(query) + "&s=" + smooth);
       }
       
@@ -224,9 +228,12 @@ $(function() {
   });
   
   if (history && history.pushState) {
-    $(window).bind("popstate", function() {
+    $(window).on("popstate", function() {
+      if (!popstateReady) { return false; }
+      
       $("#q").val(getParameterByName("q"));
       $("#s").val(getParameterByName("s"));
+      
       $("#ngramForm").addClass("noPush")
       $("#ngramSubmit").submit();
     });
