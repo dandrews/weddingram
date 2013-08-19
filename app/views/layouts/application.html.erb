@@ -23,6 +23,16 @@
     <%= yield %>
   </div>
   
+  <footer>
+    <span class="footer span12">
+      <ul>
+        <li><a href="mailto:weddingcrunchers@gmail.com">Contact</a> | </li>
+        <li><a href="/about">About</a> | </li>
+        <li>&copy; <%= Time.zone.now.year %></li>
+      </ul>
+    </span>
+  </footer>
+  
   <%=raw chartbeat_footer %>
 </body>
 </html>

@@ -7,11 +7,11 @@
 
   <div class="span9">
     <div id="faq">
-      <a href="/">Home</a>
+      <a href="/" class="homeNav">Home</a>
 
       <dl>
         <dt class="first">What is this?</dt>
-        <dd>Wedding Crunchers lets you measure the frequency of specific phrases in <a href="http://www.nytimes.com/pages/fashion/weddings/index.html" target="_blank">New York Times wedding announcements</a> since 1981. When you search for a phrase, Wedding Crunchers graphs how common that phrase has been over time. The project was heavily inspired by the <a href="http://books.google.com/ngrams" target="_blank">Google Books Ngram Viewer</a></dd>
+        <dd>Wedding Crunchers lets you measure the frequency of specific phrases in <a href="http://www.nytimes.com/pages/fashion/weddings/index.html" target="_blank"><i>New York Times</i> wedding announcements</a> since 1981. When you search for a phrase, Wedding Crunchers graphs how common that phrase has been over time. The project was heavily inspired by the <a href="http://books.google.com/ngrams" target="_blank">Google Books Ngram Viewer</a></dd>
 
         <dt>I love it! Where can I read more about it?</dt>
         <dd>There's a detailed writeup on <%= link_to "Rap Genius", writeup_url, :target => "_blank" %>, of course</dd>
@@ -31,6 +31,9 @@
         <dt>Any other cool features?</dt>
         <dd>Sure, if you want to get fancy, you can use <code>+</code> and <code>/</code> to build advanced searches. Check out some of the recommended searches for examples</dd>
 
+        <dt>What's the deal with the word clouds?</dt>
+        <dd>Each <a href="/wordclouds">word cloud</a> contains the phrases that were most common in announcements from a particular decade relative to the other decades</dd>
+        
         <dt>Where can I learn more about ngrams?</dt>
         <dd><a href="http://en.wikipedia.org/wiki/N-gram" target="_blank">Wikipedia</a> and the <a href="http://books.google.com/ngrams/info" target="_blank">Google Books Ngram Viewer</a> are good places to start</dd>
 

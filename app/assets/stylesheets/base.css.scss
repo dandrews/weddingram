@@ -157,3 +157,26 @@
     margin-bottom: 5px;
   }
 }
+
+.footer {
+  li { display: inline; }
+  border-top: 1px solid #ccc;
+  padding-top: 10px;
+}
+
+.wordcloud {
+  margin-bottom: 30px;
+}
+
+.homeNav {
+  font-size: 135%;
+}
+
+.cloudsSummary {
+  margin-left: 0px;
+  h3 { line-height: 30px; }
+}
+
+.cloudSocialLinks {
+  margin-bottom: 8px;
+}

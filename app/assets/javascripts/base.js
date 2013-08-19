@@ -123,7 +123,7 @@ $(function() {
             }
           },
           title: {
-            text: "NYT Frequency"
+            text: "NYT Wedding Frequency"
           }
         },
         title: {
@@ -186,7 +186,7 @@ $(function() {
     });
   });
   
-  $('#randomSearch').on({
+  $('#randomSearch, .rotating, .refreshTagline').on({
     click: function(e) {
       e.preventDefault();
       
@@ -199,13 +199,13 @@ $(function() {
     }
   });
   
-  $(".rotating, .refreshTagline").on({
-    click: function() {
-      $.get("/articles/tagline", function(data) {
-        $("#tagline .rotating").html(data);
-      })
-    }
-  });
+  // $(".rotating, .refreshTagline").on({
+  //   click: function() {
+  //     $.get("/articles/tagline", function(data) {
+  //       $("#tagline .rotating").html(data);
+  //     })
+  //   }
+  // });
   
   if (!$('#blank').val()) {
     if ($('#q').val()) {
@@ -219,6 +219,12 @@ $(function() {
     trigger: 'hover',
     placement: 'bottom',
     content: 'A smoothing value of 1 means that the data shown for 1990 will be the average of 1989, 1990, and 1991. In general you should use higher values of smoothing when you search for less common terms. Set smoothing to 0 if you want the raw data'
+  });
+  
+  $(".comma-separated").popover({
+    trigger: 'hover',
+    placement: 'bottom',
+    content: "Searches are not case sensitive, and punctuation is removed automatically. You can use '+' and '/' along with parentheses to do more advanced queries. See the 'About' page for more info"
   });
   
   $("#exportGraph").on({

@@ -1,6 +1,7 @@
 Weddingram::Application.routes.draw do
   root :to => 'articles#index'
   match '/about' => 'articles#about', :as => :about, :via => :get
+  match '/wordclouds' => 'articles#wordclouds', :as => :wordclouds, :via => :get
   match '/articles/ngram_calculator' => 'articles#ngram_calculator', :as => :ngram_calculator, :via => :get
   match '/articles/search' => 'articles#search', :as => :search, :via => :get
   match '/articles/random' => 'articles#random', :as => :random, :via => :get

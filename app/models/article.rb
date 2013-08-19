@@ -186,4 +186,11 @@ class Article < ActiveRecord::Base
   def canonical_url
     url.gsub(/\?.*$/, '')
   end
+  
+  def self.wordcloud_urls
+    ["http://i.imgur.com/LXUpNTt.png",
+     "http://i.imgur.com/SHXfsbP.png",
+     "http://i.imgur.com/vCq59h4.png",
+     "http://i.imgur.com/anlSlKv.png"]
+  end
 end
