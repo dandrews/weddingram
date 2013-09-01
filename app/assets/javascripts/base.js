@@ -12,6 +12,10 @@ $(function() {
   var popstateReady = false;
   
   var setupTweetButton = function() {
+    if (typeof(twttr) == "undefined") {
+      return false;
+    }
+    
     $("#tweetButton iframe").remove();
     var tweetMessage = $("#q").val() || 'Analyzing trends over 30+ years of The New York Times Weddings & Celebrations announcements!'
     var tweetContent = ('NYT #WeddingCrunchers - ' + tweetMessage).substr(0, 119);
@@ -198,6 +202,7 @@ $(function() {
       
       $.get("/articles/random", function(data) {
         $("#ngramForm #q").val(data["raw"]);
+        $("#ngramForm #q").autoGrow(40)
         $("#ngramForm #s").val(data["smoothing"]);
         $("#ngramForm").submit();
       });
@@ -236,6 +241,7 @@ $(function() {
       if (!popstateReady) { return false; }
       
       $("#q").val(getParameterByName("q"));
+      $("#q").autoGrow(40);
       $("#s").val(getParameterByName("s"));
       
       $("#ngramForm").addClass("noPush")
