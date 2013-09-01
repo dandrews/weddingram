@@ -47,6 +47,6 @@ module ApplicationHelper
   end
   
   def writeup_url
-    "http://rapgenius.com/"
+    ENV['WRITEUP_URL'].presence || "http://rapgenius.com/"
   end
 end

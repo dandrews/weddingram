@@ -5,9 +5,9 @@ class String
   
   def is_too_long_to_be_a_valid_query?
     if is_equation?
-      squish.split_into_equation_components.any?{|str| str.split(" ").uniq.size > Article::MAX_NGRAM_SIZE}
+      squish.split_into_equation_components.any?{|str| str.split(" ").size > Article::MAX_NGRAM_SIZE}
     else
-      squish.split(" ").uniq.size > Article::MAX_NGRAM_SIZE
+      squish.split(" ").size > Article::MAX_NGRAM_SIZE
     end
   end
   

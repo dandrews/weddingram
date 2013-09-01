@@ -25,7 +25,7 @@ $(function() {
   };
   
   $.getScript("//platform.twitter.com/widgets.js", function() {
-    // setupTweetButton();
+    setupTweetButton();
   });
   
   $("#q").autoGrow(40);
@@ -38,7 +38,7 @@ $(function() {
       $("#articleSummaries").empty()
     },
     'ajax:success': function(xhr, data, status) {
-      var $this, query, filename;
+      var $this, query, filename, title;
       $this = $(this);
       
       if (data["tagline"]) {
@@ -81,6 +81,8 @@ $(function() {
           pointStart: data["years"][0]
         });
       }
+      
+      title = terms.join(", ")
       
       $('#ngramContainer').highcharts({
         tooltip: {
@@ -127,7 +129,7 @@ $(function() {
           }
         },
         title: {
-          text: terms.join(", "),
+          text: title,
           style: {
             fontSize: '18px',
             lineHeight: '18px'
@@ -166,6 +168,10 @@ $(function() {
               }
             }
           }
+        },
+        credits: {
+          text: "WeddingCrunchers.com",
+          href: "http://www.weddingcrunchers.com"
         }
       });
       
@@ -173,7 +179,7 @@ $(function() {
         $("#articleSummaries").html(data)
       });
       
-      // setupTweetButton();
+      setupTweetButton();
     }
   });
   
@@ -198,14 +204,6 @@ $(function() {
       return false;
     }
   });
-  
-  // $(".rotating, .refreshTagline").on({
-  //   click: function() {
-  //     $.get("/articles/tagline", function(data) {
-  //       $("#tagline .rotating").html(data);
-  //     })
-  //   }
-  // });
   
   if (!$('#blank').val()) {
     if ($('#q').val()) {

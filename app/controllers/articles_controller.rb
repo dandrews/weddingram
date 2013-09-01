@@ -50,7 +50,7 @@ class ArticlesController < ApplicationController
     elsif terms.size > 8
       "You can't enter more than 8 things!"
     elsif terms.any?{|t| t.is_too_long_to_be_a_valid_query?}
-      "Max ngram size is #{Article::MAX_NGRAM_SIZE}"
+      "Search phrases can't contain more than #{Article::MAX_NGRAM_SIZE} words!"
     elsif smoothing_factor < 0 || smoothing_factor > 5
       "Smoothing Factor must be between 0 and 5"
     end
