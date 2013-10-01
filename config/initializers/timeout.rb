@@ -1,1 +1,1 @@
-Rack::Timeout.timeout = 12
+Rack::Timeout.timeout = 8
