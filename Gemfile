@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 ruby "2.0.0"
 
-gem 'rails', '3.2.16'
+gem 'rails', '3.2.17'
 gem 'pg', '0.16.0'
 gem 'redis', '3.0.4'
 gem 'rack-timeout', '0.0.4'
