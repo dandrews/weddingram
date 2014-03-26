@@ -129,7 +129,7 @@ $(function() {
             }
           },
           title: {
-            text: "NYT Wedding Frequency"
+            text: "NYT Wedding Word Frequency"
           }
         },
         title: {
